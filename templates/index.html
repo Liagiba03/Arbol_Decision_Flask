@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árbol de Decisión</title>
+    <style>
+        /* Spinner de carga */
+        #loading {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Imagen del árbol */
+        #tree-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px;">
+        <h1>Árbol de decisión</h1>
+        <p>Pulsa el botón para generar el árbol de decisión</p>
+        <button id="generate-btn" style="padding: 10px 20px; font-size: 16px;">Generar Árbol de Decisión</button>
+
+        <!-- Spinner de carga -->
+        <div id="loading">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Contenedor para la imagen del árbol -->
+    <div id="tree-container">
+        <h1>Árbol de Decisión Generado</h1>
+        <img id="tree-image" src="" alt="Árbol de Decisión">
+    </div>
+
+    <script>
+        document.getElementById('generate-btn').addEventListener('click', function () {
+            const loading = document.getElementById('loading');
+            const treeContainer = document.getElementById('tree-container');
+            const treeImage = document.getElementById('tree-image');
+
+            // Mostrar spinner
+            loading.style.display = 'block';
+
+            // Solicitar generación del árbol
+            fetch('/generate-tree')
+                .then(response => response.json())
+                .then(data => {
+                    // Ocultar spinner
+                    loading.style.display = 'none';
+
+                    // Mostrar imagen del árbol
+                    treeImage.src = data.tree_image;
+                    treeContainer.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loading.style.display = 'none';
+                    alert('Ocurrió un error al generar el árbol.');
+                });
+        });
+    </script>
+</body>
+</html>
